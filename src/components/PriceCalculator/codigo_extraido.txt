@@ -1,0 +1,1653 @@
+// Arquivo: nostress-next/next-env.d.ts
+/// <reference types="next" />
+/// <reference types="next/image-types/global" />
+
+// NOTE: This file should not be edited
+// see https://nextjs.org/docs/pages/api-reference/config/typescript for more information.
+
+
+// Arquivo: nostress-next/next.config.ts
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  /* config options here */
+};
+
+export default nextConfig;
+
+
+// Arquivo: nostress-next/tailwind.config.ts
+import type { Config } from "tailwindcss";
+
+export default {
+  content: [
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
+  theme: {
+    extend: {
+      colors: {
+        background: "var(--background)",
+        foreground: "var(--foreground)",
+      },
+    },
+  },
+  plugins: [],
+} satisfies Config;
+
+
+// Arquivo: nostress-next/eslint.config.js
+import js from '@eslint/js';
+import globals from 'globals';
+
+export default [
+  { ignores: ['dist'] },
+  {
+    files: ['**/*.{js,jsx,ts,tsx}'],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: globals.browser,
+      parserOptions: {
+        ecmaVersion: 'latest',
+        ecmaFeatures: { jsx: true },
+        sourceType: 'module',
+      },
+    },
+    settings: { react: { version: '18.3' } },
+    rules: {
+      ...js.configs.recommended.rules,
+      'react/jsx-uses-react': 'off',
+      'react/react-in-jsx-scope': 'off',
+    },
+  },
+];
+
+
+// Arquivo: nostress-next/src/components/FeatureSection/FeatureSection.tsx
+// src/components/FeatureSection.tsx
+import React from 'react';
+import Link from 'next/link';
+import { Calculator, DollarSign, BarChart2, ArrowRight } from 'lucide-react';
+
+interface Feature {
+  icon: React.ComponentType<{ className?: string }>;
+  title: string;
+  color: string;
+  description: string;
+}
+
+const features: Feature[] = [
+  {
+    icon: Calculator,
+    title: 'Cálculo Preciso',
+    color: 'emerald',
+    description: 'Análise detalhada de custos e margens de lucro para decisões mais acertadas'
+  },
+  {
+    icon: DollarSign,
+    title: 'Multi-moeda',
+    color: 'blue',
+    description: 'Suporte para várias moedas dos países lusófonos, facilitando negócios internacionais'
+  },
+  {
+    icon: BarChart2,
+    title: 'Análise Visual',
+    color: 'purple',
+    description: 'Visualize suas margens e lucros com gráficos intuitivos e relatórios detalhados'
+  }
+];
+
+const FeatureSection: React.FC = () => {
+  const [activeFeature, setActiveFeature] = React.useState(0);
+
+  React.useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveFeature(prev => (prev + 1) % features.length);
+    }, 3000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {features.map(({ icon: Icon, title, color, description }, index) => (
+          <div 
+            key={title}
+            className={`group relative transform transition-all duration-500 ${
+              index === activeFeature ? 'scale-105' : 'scale-100'
+            }`}
+            role="region"
+            aria-label={`Recurso: ${title}`}
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-black rounded-xl" />
+            <div className="absolute inset-0 bg-gradient-to-br from-transparent to-emerald-900/30 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="absolute inset-0 rounded-xl border border-gray-800 group-hover:border-emerald-500/50 transition-colors duration-500" />
+            
+            <div className="relative p-6 space-y-4">
+              <Icon className={`h-12 w-12 text-${color}-400`} aria-hidden="true" />
+              <h3 className="text-xl font-semibold text-white">{title}</h3>
+              <p className="text-gray-400">{description}</p>
+              
+              <Link 
+                href="/recursos"
+                className="inline-flex items-center text-sm text-emerald-400 hover:text-emerald-300 transition-colors duration-300"
+                aria-label={`Saiba mais sobre ${title}`}
+              >
+                <span>Saiba mais</span>
+                <ArrowRight className="ml-2 w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" />
+              </Link>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default FeatureSection;
+
+// Arquivo: nostress-next/src/components/HeroSection/HeroSection.tsx
+// src/components/HeroSection.tsx
+import React from 'react';
+import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
+
+const HeroSection: React.FC = () => {
+  return (
+    <div className="relative pt-20">
+      {/* Background Gradients */}
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-900/50 via-black to-blue-900/50" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(16,185,129,0.1),transparent_70%)]" />
+      </div>
+      
+      {/* Content */}
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
+        <div className="text-center">
+          <h1 className="text-6xl md:text-7xl font-bold mb-8 relative group">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 via-teal-400 to-blue-400">
+              Precificação sem Estresse
+            </span>
+          </h1>
+          
+          <p className="text-xl md:text-2xl text-emerald-200/80 mb-12 max-w-3xl mx-auto">
+            Calcule preços ideais, maximize lucros e tome decisões mais inteligentes para seu negócio
+          </p>
+          
+          <Link 
+            href="/recursos" 
+            className="relative group inline-block px-8 py-4 bg-transparent overflow-hidden rounded-lg"
+            aria-label="Começar a usar o sistema de precificação"
+          >
+            <div className="absolute inset-0 border border-emerald-500 rounded-lg" />
+            <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 via-teal-500 to-blue-500 opacity-50 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="relative z-10 flex items-center space-x-2">
+              <span className="font-semibold text-white">
+                Começar Agora
+              </span>
+              <ArrowRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform duration-300" />
+            </div>
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default HeroSection;
+
+// Arquivo: nostress-next/src/components/Navbar/Navbar.tsx
+// src/components/Navbar.tsx
+import React from 'react';
+import Link from 'next/link';
+import { Calculator, Menu, X } from 'lucide-react';
+
+const MobileMenu: React.FC<{
+  isOpen: boolean;
+  onClose: () => void;
+}> = ({ isOpen, onClose }) => {
+  if (!isOpen) return null;
+
+  const menuItems = [
+    { label: 'Recursos', path: '/recursos' },
+    { label: 'Preços', path: '/precos' },
+    { label: 'Sobre', path: '/sobre' },
+    { label: 'Contato', path: '/contato' },
+  ];
+
+  return (
+    <div className="md:hidden absolute top-16 left-0 right-0 bg-black/95 border-b border-emerald-500/30 backdrop-blur-xl z-50">
+      <div className="px-4 py-2">
+        {menuItems.map((item) => (
+          <Link
+            key={item.label}
+            href={item.path}
+            legacyBehavior
+          >
+            <a
+              className="block py-3 text-gray-300 hover:text-emerald-400 transition-colors duration-300"
+              onClick={onClose}
+            >
+              {item.label}
+            </a>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const Navbar: React.FC = () => {
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+
+  const menuItems = [
+    { label: 'Recursos', path: '/recursos' },
+    { label: 'Preços', path: '/precos' },
+    { label: 'Sobre', path: '/sobre' },
+    { label: 'Contato', path: '/contato' },
+  ];
+
+  return (
+    <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-black/30">
+      <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 via-teal-500/10 to-blue-500/10" />
+      <div className="absolute inset-0 border-b border-emerald-500/30" />
+      
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
+          <Link href="/" legacyBehavior>
+            <a className="flex items-center gap-3 group">
+              <Calculator className="h-8 w-8 text-emerald-400 transform group-hover:rotate-12 transition-transform duration-300" />
+              <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 via-teal-400 to-blue-400">
+                NoStress
+              </span>
+            </a>
+          </Link>
+
+          <div className="hidden md:flex items-center space-x-8">
+            {menuItems.map((item) => (
+              <Link
+                key={item.label}
+                href={item.path}
+                legacyBehavior
+              >
+                <a className="relative group py-2">
+                  <span className="relative z-10 text-gray-300 group-hover:text-emerald-400 transition-colors duration-300">
+                    {item.label}
+                  </span>
+                  <div className="absolute bottom-0 left-1/2 w-0 h-px bg-emerald-400 group-hover:w-full group-hover:left-0 transition-all duration-300" />
+                </a>
+              </Link>
+            ))}
+          </div>
+
+          <button 
+            className="md:hidden p-2"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label={isMenuOpen ? "Fechar menu" : "Abrir menu"}
+            aria-expanded={isMenuOpen}
+          >
+            {isMenuOpen ? (
+              <X className="h-6 w-6 text-emerald-400" />
+            ) : (
+              <Menu className="h-6 w-6 text-emerald-400" />
+            )}
+          </button>
+        </div>
+      </div>
+
+      <MobileMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
+    </nav>
+  );
+};
+
+export default Navbar;
+
+// Arquivo: nostress-next/src/components/PriceCalculator/CalculationSection.tsx
+// src/components/PriceCalculator/CalculationSection.tsx
+import React from 'react';
+import { Calculator } from 'lucide-react';
+
+interface CalculationSectionProps {
+  profitMargin: string;
+  onProfitMarginChange: (value: string) => void;
+  onCalculate: () => void;
+  disabled: boolean;
+}
+
+const CalculationSection: React.FC<CalculationSectionProps> = ({
+  profitMargin,
+  onProfitMarginChange,
+  onCalculate,
+  disabled
+}) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (/^\d*\.?\d*$/.test(value)) { // Validação de números decimais
+      onProfitMarginChange(value);
+    }
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      onCalculate();
+    }
+  };
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="relative">
+        <input
+          type="text"
+          inputMode="decimal"
+          placeholder="Margem de Lucro (%)"
+          value={profitMargin}
+          onChange={handleInputChange}
+          onKeyPress={handleKeyPress}
+          className="w-full p-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-blue-200/70 pr-12"
+          aria-label="Digite a margem de lucro desejada"
+          disabled={disabled}
+        />
+        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-blue-200/70">%</span>
+      </div>
+
+      <button
+        onClick={onCalculate}
+        disabled={disabled}
+        className={`p-3 rounded-lg transition-all duration-300 shadow-lg flex items-center justify-center gap-2 ${
+          disabled 
+            ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
+            : 'bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600'
+        }`}
+        aria-label={disabled ? "Calcular preços (desabilitado)" : "Calcular preços"}
+      >
+        <Calculator className="w-5 h-5" />
+        <span>Calcular Preços</span>
+      </button>
+    </div>
+  );
+};
+
+export default CalculationSection;
+
+// Arquivo: nostress-next/src/components/PriceCalculator/constants.ts
+// src/components/PriceCalculator/constants.ts
+
+// Interface principal para configuração de moeda
+export interface CurrencyConfig {
+  symbol: string;
+  name: string;
+  locale: string;
+  pt: string;
+  currency: string; // Código ISO 4217
+}
+
+// Tipo para as chaves suportadas
+export type CurrencyCode = 'BRL' | 'EUR' | 'AOA' | 'CVE' | 'MZN' | 'STN';
+
+// Configurações completas com type safety
+export const CURRENCY_CONFIG: Record<CurrencyCode, CurrencyConfig> = {
+  BRL: {
+    symbol: 'R$',
+    name: 'Real Brasileiro',
+    locale: 'pt-BR',
+    pt: 'Exemplo: Aluguel',
+    currency: 'BRL'
+  },
+  EUR: {
+    symbol: '€',
+    name: 'Euro (Portugal)',
+    locale: 'pt-PT',
+    pt: 'Exemplo: Aluguer',
+    currency: 'EUR'
+  },
+  AOA: {
+    symbol: 'Kz',
+    name: 'Kwanza Angolano',
+    locale: 'pt-AO',
+    pt: 'Exemplo: Aluguer',
+    currency: 'AOA'
+  },
+  CVE: {
+    symbol: '$',
+    name: 'Escudo Cabo-verdiano',
+    locale: 'pt-CV',
+    pt: 'Exemplo: Aluguer',
+    currency: 'CVE'
+  },
+  MZN: {
+    symbol: 'MT',
+    name: 'Metical Moçambicano',
+    locale: 'pt-MZ',
+    pt: 'Exemplo: Aluguer',
+    currency: 'MZN'
+  },
+  STN: {
+    symbol: 'Db',
+    name: 'Dobra São-tomense',
+    locale: 'pt-ST',
+    pt: 'Exemplo: Aluguer',
+    currency: 'STN'
+  }
+} as const;
+
+// Tipo auxiliar para chaves válidas
+export type ValidCurrency = keyof typeof CURRENCY_CONFIG;
+
+// Lista de moedas suportadas para uso em componentes
+export const SUPPORTED_CURRENCIES = Object.keys(CURRENCY_CONFIG) as CurrencyCode[];
+
+// Validador de moeda
+export const isValidCurrency = (code: string): code is CurrencyCode => {
+  return code in CURRENCY_CONFIG;
+};
+
+// Arquivo: nostress-next/src/components/PriceCalculator/constants.js
+"use strict";
+// src/components/PriceCalculator/constants.ts
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.isValidCurrency = exports.SUPPORTED_CURRENCIES = exports.CURRENCY_CONFIG = void 0;
+// Configurações completas com type safety
+exports.CURRENCY_CONFIG = {
+    BRL: {
+        symbol: 'R$',
+        name: 'Real Brasileiro',
+        locale: 'pt-BR',
+        pt: 'Exemplo: Aluguel',
+        currency: 'BRL'
+    },
+    EUR: {
+        symbol: '€',
+        name: 'Euro (Portugal)',
+        locale: 'pt-PT',
+        pt: 'Exemplo: Aluguer',
+        currency: 'EUR'
+    },
+    AOA: {
+        symbol: 'Kz',
+        name: 'Kwanza Angolano',
+        locale: 'pt-AO',
+        pt: 'Exemplo: Aluguer',
+        currency: 'AOA'
+    },
+    CVE: {
+        symbol: '$',
+        name: 'Escudo Cabo-verdiano',
+        locale: 'pt-CV',
+        pt: 'Exemplo: Aluguer',
+        currency: 'CVE'
+    },
+    MZN: {
+        symbol: 'MT',
+        name: 'Metical Moçambicano',
+        locale: 'pt-MZ',
+        pt: 'Exemplo: Aluguer',
+        currency: 'MZN'
+    },
+    STN: {
+        symbol: 'Db',
+        name: 'Dobra São-tomense',
+        locale: 'pt-ST',
+        pt: 'Exemplo: Aluguer',
+        currency: 'STN'
+    }
+};
+// Lista de moedas suportadas para uso em componentes
+exports.SUPPORTED_CURRENCIES = Object.keys(exports.CURRENCY_CONFIG);
+// Validador de moeda
+var isValidCurrency = function (code) {
+    return code in exports.CURRENCY_CONFIG;
+};
+exports.isValidCurrency = isValidCurrency;
+
+
+// Arquivo: nostress-next/src/components/PriceCalculator/CostForm.tsx
+// src/components/PriceCalculator/CostForm.tsx
+import React from 'react';
+import { Plus } from 'lucide-react';
+import { CURRENCY_CONFIG, CurrencyCode } from './constants';
+
+// Tipos para o estado do formulário
+interface CostFormState {
+  description: string;
+  value: string;
+}
+
+// Props do componente
+interface CostFormProps {
+  form: CostFormState;
+  onFormChange: React.Dispatch<React.SetStateAction<CostFormState>>;
+  onSubmit: (e: React.FormEvent) => void;
+  selectedCurrency: CurrencyCode;
+}
+
+const CostForm: React.FC<CostFormProps> = ({
+  form,
+  onFormChange,
+  onSubmit,
+  selectedCurrency
+}) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { name, value } = e.target;
+    onFormChange(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  return (
+    <form onSubmit={onSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <input
+        type="text"
+        name="description"
+        placeholder={CURRENCY_CONFIG[selectedCurrency].pt}
+        value={form.description}
+        onChange={handleInputChange}
+        className="p-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-blue-200/70"
+        aria-label="Descrição do custo"
+      />
+      
+      <input
+        type="number"
+        name="value"
+        placeholder={`Valor (${CURRENCY_CONFIG[selectedCurrency].symbol})`}
+        value={form.value}
+        onChange={handleInputChange}
+        className="p-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-blue-200/70"
+        aria-label="Valor do custo"
+        min="0"
+        step="0.01"
+      />
+
+      <button 
+        type="submit" 
+        className="col-span-full bg-gradient-to-r from-emerald-500 to-teal-500 text-white p-3 rounded-lg hover:from-emerald-600 hover:to-teal-600 transition-all duration-300 shadow-lg flex items-center justify-center gap-2"
+        aria-label="Adicionar custo"
+      >
+        <Plus className="w-5 h-5" />
+        Adicionar Custo
+      </button>
+    </form>
+  );
+};
+
+export default CostForm;
+
+// Arquivo: nostress-next/src/components/PriceCalculator/CostList.tsx
+// src/components/PriceCalculator/CostList.tsx
+import React from 'react';
+import { Trash2 } from 'lucide-react';
+import { formatCurrency } from './utils';
+import { CurrencyCode } from './constants';
+
+// Interface para o tipo Cost
+interface Cost {
+  description: string;
+  value: number;
+}
+
+interface CostListProps {
+  costs: Cost[];
+  onRemove: (index: number) => void;
+  selectedCurrency: CurrencyCode;
+}
+
+const CostList: React.FC<CostListProps> = ({ 
+  costs, 
+  onRemove, 
+  selectedCurrency 
+}) => {
+  if (!costs.length) return null;
+
+  return (
+    <div className="mt-6">
+      <h4 className="text-lg font-medium text-blue-200 mb-3">
+        Custos Cadastrados:
+      </h4>
+      
+      <div className="space-y-2">
+        {costs.map((cost, index) => (
+          <div 
+            key={`${cost.description}-${index}`}
+            className="flex justify-between items-center p-3 bg-white/5 rounded-lg border border-white/10"
+          >
+            <div className="flex-1 min-w-0">
+              <p className="text-white truncate">
+                {cost.description}
+              </p>
+              <p className="text-sm text-gray-400">
+                {formatCurrency(cost.value, selectedCurrency)}
+              </p>
+            </div>
+            
+            <button
+              onClick={() => onRemove(index)}
+              className="ml-4 text-red-400 hover:text-red-300 transition-colors"
+              aria-label={`Remover custo ${cost.description}`}
+            >
+              <Trash2 className="w-5 h-5" />
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default CostList;
+
+// Arquivo: nostress-next/src/components/PriceCalculator/CurrencySelector.tsx
+// src/components/PriceCalculator/CurrencySelector.tsx
+import React from 'react';
+import { CURRENCY_CONFIG, CurrencyCode } from './constants';
+
+interface CurrencySelectorProps {
+  selectedCurrency: CurrencyCode;
+  onCurrencyChange: (currency: CurrencyCode) => void;
+}
+
+const CurrencySelector: React.FC<CurrencySelectorProps> = ({
+  selectedCurrency,
+  onCurrencyChange
+}) => {
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value as CurrencyCode;
+    if (Object.keys(CURRENCY_CONFIG).includes(value)) {
+      onCurrencyChange(value);
+    }
+  };
+
+  return (
+    <select
+      value={selectedCurrency}
+      onChange={handleChange}
+      className="p-2 bg-white/5 border border-white/20 rounded-lg text-white backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all"
+      aria-label="Seletor de moeda"
+    >
+      {Object.entries(CURRENCY_CONFIG).map(([code, config]) => (
+        <option 
+          key={code} 
+          value={code}
+          className="bg-gray-900 text-white hover:bg-emerald-500"
+        >
+          {config.name} ({code})
+        </option>
+      ))}
+    </select>
+  );
+};
+
+export default CurrencySelector;
+
+// Arquivo: nostress-next/src/components/PriceCalculator/index.tsx
+// Arquivo: nostress-next/src/components/PriceCalculator/index.tsx
+import React, { useState } from 'react';
+import CurrencySelector from './CurrencySelector';
+import ProductForm from './ProductForm';
+import ProductList from './ProductList';
+import CostForm from './CostForm';
+import CostList from './CostList';
+import CalculationSection from './CalculationSection';
+import ResultsSection from './ResultsSection';
+import { CurrencyCode } from './constants';
+import Navbar from '../Navbar/Navbar';
+
+// Interfaces para os produtos e custos
+interface Product {
+  id: string;
+  name: string;
+  priceType: 'total' | 'unit';
+  price: number;
+  quantity: number;
+  priceUnitario: number;
+  custoTotal: number;
+  lastUpdated: Date;
+}
+
+interface Cost {
+  id: string;
+  description: string;
+  value: number;
+  dateAdded: Date;
+}
+
+const PriceCalculator: React.FC = () => {
+  const [selectedCurrency, setSelectedCurrency] = useState<CurrencyCode>('BRL');
+  const [products, setProducts] = useState<Product[]>([]);
+  const [costs, setCosts] = useState<Cost[]>([]);
+  const [profitMargin, setProfitMargin] = useState<string>('');
+  const [results, setResults] = useState<{
+    custosFixos: number;
+    custosProdutos: number;
+    detalhes: Array<{
+      produto: string;
+      quantidade: number;
+      custoUnitarioBase: number;
+      custoFixoPorUnidade: number;
+      precoVendaSugerido1: number;
+      valorTotalVendas1: number;
+      lucroTotalEsperado1: number;
+      precoVendaSugerido2: number;
+      valorTotalVendas2: number;
+      lucroTotalEsperado2: number;
+    }>;
+  } | null>(null);
+
+  // Estado para o formulário de custos (não alterado)
+  const [costForm, setCostForm] = useState<{ description: string; value: string }>({
+    description: '',
+    value: '',
+  });
+
+  // Função para gerar um ID único
+  const generateId = () => Math.random().toString(36).substr(2, 9);
+
+  // Manipulador para adicionar um produto
+  // OBSERVAÇÃO: O ProductForm agora envia os dados como strings.
+  const handleAddProduct = (productData: {
+    name: string;
+    priceType: 'total' | 'unit';
+    price: string;
+    quantity: string;
+  }) => {
+    const priceNum = parseFloat(productData.price);
+    const quantityNum = parseInt(productData.quantity, 10);
+
+    // Validação simples: se os valores não forem números válidos, não adiciona o produto
+    if (isNaN(priceNum) || isNaN(quantityNum) || quantityNum <= 0) {
+      alert('Verifique os valores do produto.');
+      return;
+    }
+
+    let priceUnitario = 0;
+    let custoTotal = 0;
+
+    if (productData.priceType === 'unit') {
+      // Se o preço informado for unitário
+      priceUnitario = priceNum;
+      custoTotal = priceNum * quantityNum;
+    } else {
+      // Se o preço informado for o preço total do lote
+      custoTotal = priceNum;
+      priceUnitario = quantityNum > 0 ? priceNum / quantityNum : 0;
+    }
+
+    const newProduct: Product = {
+      id: generateId(),
+      name: productData.name,
+      priceType: productData.priceType,
+      price: priceNum,
+      quantity: quantityNum,
+      priceUnitario,
+      custoTotal,
+      lastUpdated: new Date(),
+    };
+
+    setProducts((prev) => [...prev, newProduct]);
+  };
+
+  // Manipulador para adicionar um custo (sem alterações)
+  const handleAddCost = (costData: Omit<Cost, 'id' | 'dateAdded'>) => {
+    const newCost: Cost = {
+      ...costData,
+      id: generateId(),
+      dateAdded: new Date(),
+    };
+    setCosts((prev) => [...prev, newCost]);
+  };
+
+  const handleCostSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (costForm.description && costForm.value) {
+      handleAddCost({
+        description: costForm.description,
+        value: parseFloat(costForm.value),
+      });
+      setCostForm({ description: '', value: '' }); // Reseta o formulário
+    }
+  };
+
+  // Função de cálculo principal (não alterada)
+  const calculatePrices = () => {
+    const marginValue = parseFloat(profitMargin);
+    if (isNaN(marginValue) || marginValue <= 0) return;
+
+    const totalCustosProdutos = products.reduce((sum, p) => sum + p.custoTotal, 0);
+    const totalCustosFixos = costs.reduce((sum, c) => sum + c.value, 0);
+
+    const detalhes = products.map((produto) => {
+      const custoFixoPorUnidade = totalCustosFixos / produto.quantity;
+      const custoTotalUnitario = produto.priceUnitario + custoFixoPorUnidade;
+
+      return {
+        produto: produto.name,
+        quantidade: produto.quantity,
+        custoUnitarioBase: produto.priceUnitario,
+        custoFixoPorUnidade,
+        precoVendaSugerido1: custoTotalUnitario * (1 + marginValue / 100),
+        valorTotalVendas1: 0, // Implementar cálculo real
+        lucroTotalEsperado1: 0, // Implementar cálculo real
+        precoVendaSugerido2: 0, // Implementar cálculo real
+        valorTotalVendas2: 0, // Implementar cálculo real
+        lucroTotalEsperado2: 0, // Implementar cálculo real
+      };
+    });
+
+    setResults({
+      custosFixos: totalCustosFixos,
+      custosProdutos: totalCustosProdutos,
+      detalhes,
+    });
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-emerald-900 via-teal-900 to-blue-900 text-white overflow-hidden">
+      <Navbar />
+
+      <div className="max-w-4xl mx-auto space-y-6 mt-20 px-4">
+        <div className="backdrop-blur-lg bg-white/10 rounded-2xl shadow-xl overflow-hidden border border-white/20">
+          <div className="p-6 md:p-8">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+              <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-200 to-indigo-200">
+                Sistema de Cálculo de Preço
+              </h1>
+              <CurrencySelector
+                selectedCurrency={selectedCurrency}
+                onCurrencyChange={setSelectedCurrency}
+              />
+            </div>
+
+            <div className="space-y-8">
+              {/* Seção de Produtos */}
+              <div className="backdrop-blur-md bg-white/5 p-6 rounded-xl border border-white/10">
+                <ProductForm
+                  onAddProduct={handleAddProduct}
+                  selectedCurrency={selectedCurrency}
+                />
+                <ProductList
+                  products={products}
+                  onRemove={(id) => setProducts((prev) => prev.filter((p) => p.id !== id))}
+                  selectedCurrency={selectedCurrency}
+                />
+              </div>
+
+              {/* Seção de Custos */}
+              <div className="backdrop-blur-md bg-white/5 p-6 rounded-xl border border-white/10">
+                <CostForm
+                  form={costForm}
+                  onFormChange={setCostForm}
+                  onSubmit={handleCostSubmit}
+                  selectedCurrency={selectedCurrency}
+                />
+                <CostList
+                  costs={costs}
+                  onRemove={(id) => setCosts((prev) => prev.filter((c) => c.id !== id))}
+                  selectedCurrency={selectedCurrency}
+                />
+              </div>
+
+              {/* Seção de Cálculo */}
+              <div className="backdrop-blur-md bg-white/5 p-6 rounded-xl border border-white/10">
+                <CalculationSection
+                  profitMargin={profitMargin}
+                  onProfitMarginChange={setProfitMargin}
+                  onCalculate={calculatePrices}
+                  disabled={!products.length}
+                />
+              </div>
+
+              {/* Resultados */}
+              {results && (
+                <ResultsSection
+                  results={results}
+                  selectedCurrency={selectedCurrency}
+                />
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default PriceCalculator;
+
+
+// Arquivo: nostress-next/src/components/PriceCalculator/PDFExportButton.tsx
+// src/components/PriceCalculator/PDFExportButton.tsx
+import React from 'react';
+import { FileDown } from 'lucide-react';
+import { formatCurrency } from './utils';
+import { CURRENCY_CONFIG, CurrencyCode } from './constants';
+
+// Interface para os resultados de precificação
+interface PricingResult {
+  produto: string;
+  quantidade: number;
+  custoUnitarioBase: number;
+  precoVendaSugerido1: number;
+  valorTotalVendas1: number;
+  lucroTotalEsperado1: number;
+  precoVendaSugerido2: number;
+  valorTotalVendas2: number;
+  lucroTotalEsperado2: number;
+}
+
+interface PDFExportProps {
+  results: {
+    custosFixos: number;
+    custosProdutos: number;
+    detalhes: PricingResult[];
+  };
+  selectedCurrency: CurrencyCode;
+}
+
+const PDFExportButton: React.FC<PDFExportProps> = ({ results, selectedCurrency }) => {
+  const generatePDF = async () => {
+    try {
+      const jsPDF = (await import('jspdf')).default;
+      const doc = new jsPDF();
+      const margin = 15;
+      let yPos = margin;
+      const lineHeight = 7;
+      const pageWidth = doc.internal.pageSize.getWidth();
+
+      // Configurações iniciais
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(18);
+      doc.setTextColor(40, 180, 150);
+      doc.text('Relatório de Precificação - NoStress', margin, yPos);
+      yPos += lineHeight * 2;
+
+      // Função auxiliar para adicionar seções
+      const addSection = (title: string, content: string[][]) => {
+        if (yPos > 280) {
+          doc.addPage();
+          yPos = margin;
+        }
+        
+        doc.setFontSize(14);
+        doc.setTextColor(30, 120, 200);
+        doc.text(title, margin, yPos);
+        yPos += lineHeight;
+
+        doc.setFontSize(12);
+        doc.setTextColor(0, 0, 0);
+        content.forEach(([label, value]) => {
+          doc.text(`${label}:`, margin, yPos);
+          doc.text(value, pageWidth - margin - doc.getTextWidth(value), yPos, { align: 'right' });
+          yPos += lineHeight;
+        });
+        yPos += lineHeight;
+      };
+
+      // Seção de Resumo Geral
+      addSection('Resumo Geral', [
+        ['Custos Fixos Totais', formatCurrency(results.custosFixos, selectedCurrency)],
+        ['Custo Total Produtos', formatCurrency(results.custosProdutos, selectedCurrency)],
+        ['Custo Total', formatCurrency(results.custosFixos + results.custosProdutos, selectedCurrency)]
+      ]);
+
+      // Seção por Produto
+      results.detalhes.forEach(produto => {
+        addSection(`Produto: ${produto.produto}`, [
+          ['Quantidade', `${produto.quantidade} unidades`],
+          ['Custo Unitário Base', formatCurrency(produto.custoUnitarioBase, selectedCurrency)],
+          ['Preço Venda (Unitário)', formatCurrency(produto.precoVendaSugerido1, selectedCurrency)],
+          ['Lucro Esperado (Unitário)', formatCurrency(produto.lucroTotalEsperado1, selectedCurrency)],
+          ['Preço Venda (Total)', formatCurrency(produto.precoVendaSugerido2, selectedCurrency)],
+          ['Lucro Esperado (Total)', formatCurrency(produto.lucroTotalEsperado2, selectedCurrency)]
+        ]);
+      });
+
+      // Rodapé
+      doc.setFontSize(10);
+      doc.setTextColor(100, 100, 100);
+      doc.text(
+        `Gerado em ${new Date().toLocaleDateString()} - Moeda: ${CURRENCY_CONFIG[selectedCurrency].name}`,
+        margin,
+        290,
+        { align: 'left' }
+      );
+
+      doc.save(`relatorio-precificacao-${Date.now()}.pdf`);
+    } catch (error) {
+      console.error('Erro na geração do PDF:', error);
+      alert('Erro ao gerar o PDF. Verifique o console para mais detalhes.');
+    }
+  };
+
+  return (
+    <button
+      onClick={generatePDF}
+      className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg hover:from-blue-600 hover:to-purple-600 transition-all duration-300 shadow-lg"
+      aria-label="Exportar relatório em PDF"
+    >
+      <FileDown className="w-5 h-5" />
+      <span className="hidden sm:inline">Exportar PDF</span>
+    </button>
+  );
+};
+
+export default PDFExportButton;
+
+// Arquivo: nostress-next/src/components/PriceCalculator/ProductForm.tsx
+// Arquivo: nostress-next/src/components/PriceCalculator/ProductForm.tsx
+import React, { useState } from 'react';
+import { Plus } from 'lucide-react';
+import { CURRENCY_CONFIG, CurrencyCode } from './constants';
+
+interface ProductFormProps {
+  onAddProduct: (productData: {
+    name: string;
+    priceType: 'total' | 'unit';
+    price: string;
+    quantity: string;
+  }) => void;
+  selectedCurrency: CurrencyCode;
+}
+
+const ProductForm: React.FC<ProductFormProps> = ({ onAddProduct, selectedCurrency }) => {
+  const [form, setForm] = useState({
+    name: '',
+    priceType: 'total' as 'total' | 'unit',
+    price: '',
+    quantity: ''
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setForm(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onAddProduct(form);
+    setForm({
+      name: '',
+      priceType: 'total',
+      price: '',
+      quantity: ''
+    });
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <input
+        type="text"
+        name="name"
+        placeholder="Nome do produto"
+        value={form.name}
+        onChange={handleInputChange}
+        className="p-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-blue-200/70"
+        aria-label="Nome do produto"
+      />
+
+      <select
+        name="priceType"
+        value={form.priceType}
+        onChange={handleInputChange}
+        className="p-3 bg-white/5 border border-white/20 rounded-lg text-white"
+        aria-label="Tipo de preço"
+      >
+        <option value="total" className="bg-blue-900">Preço Total</option>
+        <option value="unit" className="bg-blue-900">Preço Unitário</option>
+      </select>
+
+      <input
+        type="number"
+        name="price"
+        placeholder={`Preço (${CURRENCY_CONFIG[selectedCurrency].symbol})`}
+        value={form.price}
+        onChange={handleInputChange}
+        className="p-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-blue-200/70"
+        aria-label="Valor do produto"
+        min="0"
+        step="0.01"
+      />
+
+      <input
+        type="number"
+        name="quantity"
+        placeholder="Quantidade"
+        value={form.quantity}
+        onChange={handleInputChange}
+        className="p-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-blue-200/70"
+        aria-label="Quantidade do produto"
+        min="1"
+      />
+
+      <button 
+        type="submit" 
+        className="col-span-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white p-3 rounded-lg hover:from-blue-600 hover:to-indigo-600 transition-all duration-300 shadow-lg flex items-center justify-center gap-2"
+        aria-label="Adicionar produto"
+      >
+        <Plus className="w-5 h-5" />
+        Adicionar Produto
+      </button>
+    </form>
+  );
+};
+
+export default ProductForm;
+
+
+// Arquivo: nostress-next/src/components/PriceCalculator/ProductList.tsx
+// src/components/PriceCalculator/ProductList.tsx
+import React from 'react';
+import { Trash2 } from 'lucide-react';
+import { formatCurrency } from './utils';
+import { CurrencyCode } from './constants';
+
+// Interface para representar um produto
+interface Product {
+  id: string;
+  name: string;
+  quantity: number;
+  priceUnitario: number;
+  lastUpdated: Date;
+}
+
+interface ProductListProps {
+  products: Product[];
+  onRemove: (id: string) => void;
+  selectedCurrency: CurrencyCode;
+}
+
+const ProductList: React.FC<ProductListProps> = ({
+  products,
+  onRemove,
+  selectedCurrency
+}) => {
+  if (!products.length) {
+    return (
+      <div className="mt-6 text-center text-blue-200">
+        Nenhum produto cadastrado
+      </div>
+    );
+  }
+
+  return (
+    <div className="mt-6">
+      <h4 className="text-lg font-medium text-blue-200 mb-3">
+        Produtos Cadastrados:
+      </h4>
+      
+      <div className="space-y-2">
+        {products.map((product) => (
+          <div 
+            key={product.id}
+            className="group flex justify-between items-center p-3 bg-white/5 rounded-lg border border-white/10 hover:border-emerald-500/20 transition-colors"
+          >
+            <div className="flex-1 min-w-0 pr-4">
+              <h5 className="text-white font-medium truncate">
+                {product.name}
+              </h5>
+              <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1">
+                <span className="text-sm text-emerald-300">
+                  {product.quantity} un.
+                </span>
+                <span className="text-sm text-blue-300">
+                  {formatCurrency(product.priceUnitario, selectedCurrency)}/un
+                </span>
+                <span className="text-sm text-gray-400">
+                  Atualizado: {product.lastUpdated.toLocaleDateString()}
+                </span>
+              </div>
+            </div>
+
+            <button
+              onClick={() => onRemove(product.id)}
+              className="opacity-70 group-hover:opacity-100 text-red-400 hover:text-red-300 transition-all"
+              aria-label={`Remover produto ${product.name}`}
+            >
+              <Trash2 className="w-5 h-5" />
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default ProductList;
+
+// Arquivo: nostress-next/src/components/PriceCalculator/ResultsSection.tsx
+// src/components/PriceCalculator/ResultsSection.tsx
+import React from 'react';
+import { formatCurrency } from './utils';
+import { CURRENCY_CONFIG, CurrencyCode } from './constants';
+import PDFExportButton from './PDFExportButton';
+
+// Interface para os resultados detalhados
+interface ProductResult {
+  produto: string;
+  quantidade: number;
+  custoUnitarioBase: number;
+  custoFixoPorUnidade: number;
+  precoVendaSugerido1: number;
+  valorTotalVendas1: number;
+  lucroTotalEsperado1: number;
+  precoVendaSugerido2: number;
+  valorTotalVendas2: number;
+  lucroTotalEsperado2: number;
+}
+
+// Interface para os resultados gerais
+interface PricingResults {
+  custosFixos: number;
+  custosProdutos: number;
+  detalhes: ProductResult[];
+}
+
+interface ResultsSectionProps {
+  results: PricingResults | null;
+  selectedCurrency: CurrencyCode;
+}
+
+const ResultsSection: React.FC<ResultsSectionProps> = ({ 
+  results, 
+  selectedCurrency 
+}) => {
+  if (!results) return null;
+
+  return (
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <h3 className="text-2xl font-medium text-blue-200">
+          Resultados
+        </h3>
+        <PDFExportButton 
+          results={results} 
+          selectedCurrency={selectedCurrency} 
+        />
+      </div>
+
+      {/* Resumo Geral */}
+      <div className="backdrop-blur-md bg-white/5 p-6 rounded-xl border border-white/10">
+        <div className="text-white">
+          <p className="text-xl font-medium text-blue-200 mb-3">
+            Resumo Geral
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <p className="text-lg">
+                Custos Fixos Totais: {' '}
+                <span className="font-semibold text-emerald-300">
+                  {formatCurrency(results.custosFixos, selectedCurrency)}
+                </span>
+              </p>
+              <p className="text-lg mt-2">
+                Custo Total Produtos: {' '}
+                <span className="font-semibold text-blue-300">
+                  {formatCurrency(results.custosProdutos, selectedCurrency)}
+                </span>
+              </p>
+            </div>
+            <div className="md:text-right">
+              <p className="text-lg">
+                Custo Total: {' '}
+                <span className="font-semibold text-purple-300">
+                  {formatCurrency(
+                    results.custosFixos + results.custosProdutos, 
+                    selectedCurrency
+                  )}
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Detalhes por Produto */}
+      {results.detalhes.map((produto, index) => (
+        <div 
+          key={`${produto.produto}-${index}`}
+          className="backdrop-blur-md bg-white/5 p-6 rounded-xl border border-white/10 space-y-6"
+        >
+          <h4 className="text-xl font-medium text-blue-200">
+            {produto.produto}
+          </h4>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Dados Básicos */}
+            <div className="space-y-2 text-white/90">
+              <p className="flex justify-between">
+                <span>Quantidade:</span>
+                <span className="font-medium">
+                  {produto.quantidade} unidades
+                </span>
+              </p>
+              <p className="flex justify-between">
+                <span>Custo Unitário Base:</span>
+                <span className="font-medium">
+                  {formatCurrency(produto.custoUnitarioBase, selectedCurrency)}
+                </span>
+              </p>
+              <p className="flex justify-between">
+                <span>Custo Fixo por Unidade:</span>
+                <span className="font-medium">
+                  {formatCurrency(produto.custoFixoPorUnidade, selectedCurrency)}
+                </span>
+              </p>
+            </div>
+
+            {/* Abordagem por Custo Unitário */}
+            <div className="bg-white/5 p-4 rounded-lg border border-white/10">
+              <p className="text-lg font-medium text-blue-200 mb-3">
+                Abordagem por Custo Unitário
+              </p>
+              <div className="space-y-2 text-white/90">
+                <p className="flex justify-between">
+                  <span>Preço de Venda:</span>
+                  <span className="font-medium">
+                    {formatCurrency(produto.precoVendaSugerido1, selectedCurrency)}
+                  </span>
+                </p>
+                <p className="flex justify-between">
+                  <span>Total de Vendas:</span>
+                  <span className="font-medium">
+                    {formatCurrency(produto.valorTotalVendas1, selectedCurrency)}
+                  </span>
+                </p>
+                <p className="flex justify-between text-emerald-300">
+                  <span>Lucro Esperado:</span>
+                  <span className="font-medium">
+                    {formatCurrency(produto.lucroTotalEsperado1, selectedCurrency)}
+                  </span>
+                </p>
+              </div>
+            </div>
+
+            {/* Abordagem por Custo Total */}
+            <div className="bg-white/5 p-4 rounded-lg border border-white/10 md:col-span-2">
+              <p className="text-lg font-medium text-blue-200 mb-3">
+                Abordagem por Custo Total
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-white/90">
+                <div>
+                  <span className="block mb-1">Preço de Venda:</span>
+                  <span className="font-medium">
+                    {formatCurrency(produto.precoVendaSugerido2, selectedCurrency)}
+                  </span>
+                </div>
+                <div>
+                  <span className="block mb-1">Total de Vendas:</span>
+                  <span className="font-medium">
+                    {formatCurrency(produto.valorTotalVendas2, selectedCurrency)}
+                  </span>
+                </div>
+                <div className="text-emerald-300">
+                  <span className="block mb-1">Lucro Esperado:</span>
+                  <span className="font-medium">
+                    {formatCurrency(produto.lucroTotalEsperado2, selectedCurrency)}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default ResultsSection;
+
+// Arquivo: nostress-next/src/components/PriceCalculator/utils.ts
+// Arquivo: nostress-next/src/components/PriceCalculator/utils.ts
+import { CURRENCY_CONFIG } from './constants';
+
+export const formatCurrency = (
+  value: number | undefined,
+  currency: keyof typeof CURRENCY_CONFIG
+): string => {
+  try {
+    // Verifica se o valor é um número válido
+    if (typeof value !== 'number' || isNaN(value)) {
+      throw new Error('Valor inválido para formatação monetária');
+    }
+
+    // Verifica se a moeda está configurada
+    if (!currency || !CURRENCY_CONFIG[currency]) {
+      throw new Error('Moeda não configurada ou não suportada');
+    }
+
+    const { locale, currency: currencyCode } = CURRENCY_CONFIG[currency];
+
+    // Cria o formatador
+    const formatter = new Intl.NumberFormat(locale, {
+      style: 'currency',
+      currency: currencyCode,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+
+    return formatter.format(value);
+  } catch (error) {
+    console.error('Erro na formatação de moeda:', error);
+    // Retorna um fallback (sempre uma string) mesmo em erro
+    return '0.00';
+  }
+};
+
+// Outras funções, como parseCurrencyInput, podem permanecer inalteradas
+export const parseCurrencyInput = (
+  input: string,
+  currency: keyof typeof CURRENCY_CONFIG
+): number => {
+  const cleanValue = input
+    .replace(CURRENCY_CONFIG[currency].symbol, '')
+    .replace(/[^\d,-]/g, '')
+    .replace(',', '.');
+
+  return parseFloat(cleanValue) || 0;
+};
+
+export const validateCurrency = (
+  currency: string
+): currency is keyof typeof CURRENCY_CONFIG => {
+  return currency in CURRENCY_CONFIG;
+};
+
+export const useCurrencyFormatter = (currency: keyof typeof CURRENCY_CONFIG) => {
+  const format = (value: number) => formatCurrency(value, currency);
+  const parse = (input: string) => parseCurrencyInput(input, currency);
+
+  return { format, parse, validate: () => validateCurrency(currency) };
+};
+
+
+// Arquivo: nostress-next/src/components/PriceCalculator/utils.js
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.useCurrencyFormatter = exports.validateCurrency = exports.parseCurrencyInput = exports.formatCurrency = void 0;
+// Arquivo: nostress-next/src/components/PriceCalculator/utils.ts
+var constants_1 = require("./constants");
+var formatCurrency = function (value, currency) {
+    try {
+        // Verifica se o valor é um número válido
+        if (typeof value !== 'number' || isNaN(value)) {
+            throw new Error('Valor inválido para formatação monetária');
+        }
+        // Verifica se a moeda está configurada
+        if (!currency || !constants_1.CURRENCY_CONFIG[currency]) {
+            throw new Error('Moeda não configurada ou não suportada');
+        }
+        var _a = constants_1.CURRENCY_CONFIG[currency], locale = _a.locale, currencyCode = _a.currency;
+        // Cria o formatador
+        var formatter = new Intl.NumberFormat(locale, {
+            style: 'currency',
+            currency: currencyCode,
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+        return formatter.format(value);
+    }
+    catch (error) {
+        console.error('Erro na formatação de moeda:', error);
+        // Retorna um fallback (sempre uma string) mesmo em erro
+        return '0.00';
+    }
+};
+exports.formatCurrency = formatCurrency;
+// Outras funções, como parseCurrencyInput, podem permanecer inalteradas
+var parseCurrencyInput = function (input, currency) {
+    var cleanValue = input
+        .replace(constants_1.CURRENCY_CONFIG[currency].symbol, '')
+        .replace(/[^\d,-]/g, '')
+        .replace(',', '.');
+    return parseFloat(cleanValue) || 0;
+};
+exports.parseCurrencyInput = parseCurrencyInput;
+var validateCurrency = function (currency) {
+    return currency in constants_1.CURRENCY_CONFIG;
+};
+exports.validateCurrency = validateCurrency;
+var useCurrencyFormatter = function (currency) {
+    var format = function (value) { return (0, exports.formatCurrency)(value, currency); };
+    var parse = function (input) { return (0, exports.parseCurrencyInput)(input, currency); };
+    return { format: format, parse: parse, validate: function () { return (0, exports.validateCurrency)(currency); } };
+};
+exports.useCurrencyFormatter = useCurrencyFormatter;
+
+
+// Arquivo: nostress-next/src/pages/_app.tsx
+import '@/styles/globals.css';
+import type { AppProps } from 'next/app';
+import Navbar from '@/components/Navbar/Navbar'; // Corrected path
+
+export default function App({ Component, pageProps }: AppProps) {
+  return (
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-emerald-900 via-teal-900 to-blue-900 text-white">
+      <Navbar />
+      <main className="flex-1 pt-20">
+        <Component {...pageProps} />
+      </main>
+    </div>
+  );
+}
+
+// Arquivo: nostress-next/src/pages/index.tsx
+// src/pages/index.tsx
+import React from 'react';
+import Navbar from '@/components/Navbar/Navbar';
+import HeroSection from '@/components/HeroSection/HeroSection';
+import FeatureSection from '@/components/FeatureSection/FeatureSection';
+
+const HomePage = () => {
+  const [scrollPosition, setScrollPosition] = React.useState(0);
+
+  React.useEffect(() => {
+    const handleScroll = () => {
+      setScrollPosition(window.scrollY);
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-emerald-900 via-teal-900 to-blue-900 text-white overflow-hidden">
+      {/* Grid Pattern animado */}
+      <div className="fixed inset-0 opacity-20">
+        <div 
+          className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f20_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f20_1px,transparent_1px)] bg-[size:24px_24px]"
+          style={{
+            transform: `translateY(${scrollPosition * 0.2}px)`
+          }}
+        />
+      </div>
+
+      <Navbar />
+      <HeroSection />
+      <FeatureSection />
+    </div>
+  );
+};
+
+export default HomePage;
+
+// Arquivo: nostress-next/src/pages/404.tsx
+// src/pages/404.tsx
+import React from 'react';
+import Link from 'next/link';
+import { Home, Compass, CloudOff } from 'lucide-react';
+
+const NotFoundPage: React.FC = () => {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-emerald-900 via-teal-900 to-blue-900 text-white overflow-hidden">
+
+      {/* Main Content */}
+      <div className="relative z-10 max-w-2xl mx-auto text-center">
+        <div className="backdrop-blur-xl bg-white/10 p-8 rounded-2xl border border-white/20 shadow-2xl">
+          {/* 404 Icon */}
+          <div className="mb-8 relative">
+            <div className="absolute inset-0 animate-float">
+              <CloudOff className="mx-auto h-24 w-24 text-blue-400/50" />
+            </div>
+            <CloudOff className="mx-auto h-24 w-24 text-blue-400" />
+          </div>
+
+          {/* Title & Subtitle */}
+          <h1 className="text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-200 to-indigo-200">
+            Página Não Encontrada
+          </h1>
+          <p className="text-xl text-blue-200/80 mb-8">
+            Parece que você se perdeu no caminho. Não se preocupe, acontece com os melhores navegadores!
+          </p>
+
+          {/* Navigation Options */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              href="/"
+              className="group flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-lg hover:from-blue-600 hover:to-indigo-600 transition-all duration-300 shadow-lg"
+            >
+              <Home className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
+              <span>Voltar ao Início</span>
+            </Link>
+            
+            <button
+              onClick={() => window.history.back()}
+              className="group flex items-center justify-center gap-2 px-6 py-3 bg-white/10 rounded-lg hover:bg-white/20 transition-all duration-300 border border-white/20"
+            >
+              <Compass className="w-5 h-5 group-hover:-rotate-45 transition-transform duration-300" />
+              <span>Voltar</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Error Code */}
+        <div className="mt-8 font-mono text-lg text-blue-200/60 animate-pulse">
+          Erro 404
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default NotFoundPage;
+
+// Arquivo: nostress-next/src/pages/recursos.tsx
+// src/pages/recursos.tsx
+import React from 'react';
+import PriceCalculator from '@/components/PriceCalculator';
+
+const RecursosPage: React.FC = () => {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-emerald-900 via-teal-900 to-blue-900 text-white overflow-hidden">
+      <PriceCalculator />
+    </div>
+  );
+};
+
+export default RecursosPage;
+
