@@ -33,6 +33,10 @@ interface Cost {
 interface PricingResults {
   custosFixos: number;
   custosProdutos: number;
+  custos: Array<{
+    description: string;
+    value: number;
+  }>;
   detalhes: Array<{
     produto: string;
     quantidade: number;
@@ -184,6 +188,7 @@ const PriceCalculator: React.FC = () => {
       setResults({
         custosFixos: totalCustosFixos,
         custosProdutos: totalCustosProdutos,
+        custos: costs,
         detalhes,
       });
       setShowResults(true);

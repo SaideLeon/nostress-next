@@ -22,6 +22,10 @@ interface PDFExportProps {
     custosFixos: number;
     custosProdutos: number;
     detalhes: PricingResult[];
+    custos: Array<{ 
+      description: string;
+      value: number;
+    }>;
   };
   selectedCurrency: CurrencyCode;
 }
@@ -64,13 +68,22 @@ const PDFExportButton: React.FC<PDFExportProps> = ({ results, selectedCurrency }
         });
         yPos += lineHeight;
       };
-
-      // Seção de Resumo Geral
-      addSection('Resumo Geral', [
-        ['Custos Fixos Totais', formatCurrency(results.custosFixos, selectedCurrency)],
-        ['Custo Total Produtos', formatCurrency(results.custosProdutos, selectedCurrency)],
-        ['Custo Total', formatCurrency(results.custosFixos + results.custosProdutos, selectedCurrency)]
+      // Nova seção de Custos Adicionais
+      addSection('Custos Adicionais', [
+        ...results.custos.map((custo, index) => [
+          `Custo ${index + 1}: ${custo.description}`,
+          formatCurrency(custo.value, selectedCurrency)
+        ]),
+        ['Total Custos Adicionais', formatCurrency(results.custosFixos, selectedCurrency)]
       ]);
+
+      // Seção de Resumo Geral (atualizada)
+      addSection('Resumo Geral', [
+        ['Custos Adicionais Totais', formatCurrency(results.custosFixos, selectedCurrency)],
+        ['Custo Total Produtos', formatCurrency(results.custosProdutos, selectedCurrency)],
+        ['Custo Total Geral', formatCurrency(results.custosFixos + results.custosProdutos, selectedCurrency)]
+      ]);
+
 
       // Seção por Produto
       results.detalhes.forEach(produto => {
